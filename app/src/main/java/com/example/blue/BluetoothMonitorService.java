@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.view.KeyEvent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -70,6 +71,7 @@ public class BluetoothMonitorService extends Service {
                 if (device != null && isAudioDevice(device)) {
                     String deviceName = getDeviceName(device);
                     Log.d(TAG, "检测到音频设备连接: " + deviceName);
+                    Toast.makeText(context, deviceName, Toast.LENGTH_LONG).show();
 
                     // 获取WakeLock,防止锁屏时休眠
                     if (!mWakeLock.isHeld()) {
@@ -118,6 +120,7 @@ public class BluetoothMonitorService extends Service {
 
         if (isBluetoothAudioOutputActive(context)) {
             Log.d(TAG, "蓝牙音频通道已激活,执行播放");
+            Toast.makeText(context, "蓝牙音频通道已激活,执行播放", Toast.LENGTH_LONG).show();
             boolean success = playMusicMultiMethod(context);
 
             if (success) {
@@ -260,7 +263,9 @@ public class BluetoothMonitorService extends Service {
             return (deviceClass == android.bluetooth.BluetoothClass.Device.AUDIO_VIDEO_WEARABLE_HEADSET ||
                     deviceClass == android.bluetooth.BluetoothClass.Device.AUDIO_VIDEO_HEADPHONES ||
                     deviceClass == android.bluetooth.BluetoothClass.Device.AUDIO_VIDEO_LOUDSPEAKER ||
-                    deviceClass == android.bluetooth.BluetoothClass.Device.AUDIO_VIDEO_CAR_AUDIO);
+                    deviceClass == android.bluetooth.BluetoothClass.Device.AUDIO_VIDEO_CAR_AUDIO ||
+                    deviceClass == android.bluetooth.BluetoothClass.Device.AUDIO_VIDEO_HANDSFREE ||
+                    deviceClass == android.bluetooth.BluetoothClass.Device.AUDIO_VIDEO_MICROPHONE);
         }
         return false;
     }
@@ -297,6 +302,7 @@ public class BluetoothMonitorService extends Service {
                 if (type == android.media.AudioDeviceInfo.TYPE_BLUETOOTH_A2DP ||
                         type == android.media.AudioDeviceInfo.TYPE_BLUETOOTH_SCO) {
                     Log.d(TAG, "检测到蓝牙音频设备已激活");
+                    Toast.makeText(context, "检测到蓝牙音频设备已激活", Toast.LENGTH_LONG).show();
                     return true;
                 }
             }
